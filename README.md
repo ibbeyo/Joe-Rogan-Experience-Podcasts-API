@@ -1,4 +1,4 @@
-# jrepodcast
+# JREPodcast
 The Joe Rogan Experience Podcasts API
 
 Sample Usage:
