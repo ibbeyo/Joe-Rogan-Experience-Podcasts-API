@@ -74,7 +74,8 @@ class API(object):
             for chunk in r.iter_content(chunk_size=255):
                 if chunk:
                     dl.write(chunk)
-        return(print(f"Episode {episode} with {podcast['title']}, finished downloading!"))
+        print(f"Episode {episode} with {podcast['title']}, finished downloading!")
+        return
 
     def recent(self):
         response = requests.get(self.domain)
