@@ -4,7 +4,6 @@ The Joe Rogan Experience Podcasts API
 Sample Usage:
 
 ``` {.sourceCode .python}
-#Downloads most recent podcasts
 
 >>> from JREPodcasts import jrepodcast
 
