@@ -46,7 +46,7 @@ class API(object):
 
         return(podcasts)
 
-    def download(self, path, episode=None, url=None, video=False):
+    def download(self, path, episode=None, url=None):
         assert os.path.isdir(path)
 
         if episode is not None:
@@ -98,11 +98,15 @@ class API(object):
             podcast_mp3 = 'http://traffic.libsyn.com/joeroganexp/%s.mp3' % (
                 'mmashow' + episode_num if 'mma' in title.lower() else 'p' + episode_num)
 
+            dllinks = episode.find('ul', attrs={'class': 'download-links'})
+            vimeo_link = dllinks.find('a')['href']
+
             _podcasts_query[x] = {
                 'episode': episode_num,
                 'title': title,
                 'date': podcast_date,
                 'desc': desc.encode(),
-                'mp3_url': podcast_mp3
+                'mp3_url': podcast_mp3,
+                'vimeo_url': vimeo_link
             }
         return(_podcasts_query)
