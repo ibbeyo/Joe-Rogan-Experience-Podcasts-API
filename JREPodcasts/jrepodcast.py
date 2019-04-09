@@ -1,6 +1,7 @@
 import requests
 import urllib
 from bs4 import BeautifulSoup, re, os
+import vlc
 
 
 def _session_decorator(func):
@@ -80,6 +81,11 @@ class API(object):
     def recent(self):
         response = requests.get(self.domain)
         return(self._podcastParser(response.content).values())
+
+    def streamPodcastAudio(self, url):
+
+        stream = vlc.MediaPlayer(url)
+        return(stream)
 
     def _podcastParser(self, html_content):
         soup = BeautifulSoup(html_content, 'html.parser')
