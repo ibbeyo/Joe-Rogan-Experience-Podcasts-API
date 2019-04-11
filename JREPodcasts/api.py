@@ -7,7 +7,7 @@ import vlc
 class JREPodcastAPI(object):
     domain = 'http://podcasts.joerogan.net'
     mp3_url = 'http://traffic.libsyn.com/joeroganexp/'
-        
+
 
     def searchFor(self, query=None, **kwargs):
         """Searches for a podcast
@@ -22,7 +22,7 @@ class JREPodcastAPI(object):
             response = session.get(self.domain)
             return self._podcastParser(response.content).values()
         elif query is None:
-            return(None)
+            return None
 
         referer = '%s/?search=%s' % (self.domain, urllib.parse.quote(query))
         session.headers.update({'Referer': referer})
@@ -30,16 +30,17 @@ class JREPodcastAPI(object):
         form_data = {'search-terms': query, 'action': 'search_podcasts'}
 
         response = session.post(
-            domain + '/wp-admin/admin-ajax.php',
+            self.domain + '/wp-admin/admin-ajax.php',
             data=form_data,
             allow_redirects=True
         )
 
+        session.close()
+
         html_content = response.json().get('response')
 
-        podcasts = self._podcastParser(html_content)
+        return self._podcastParser(html_content)
 
-        return(podcasts)
 
     def download(self, path, episode=None, url=None):
         assert os.path.isdir(path)
@@ -72,19 +73,22 @@ class JREPodcastAPI(object):
         print(f"Episode {episode} with {podcast['title']}, finished downloading!")
         return
 
+
     def streamAudio(self, url):
 
         stream = vlc.MediaPlayer(url)
-        return(stream)
+        return stream
+
 
     def recent(self):
         return self.searchFor(recent=True)
+
 
     def _podcastParser(self, html_content):
         soup = BeautifulSoup(html_content, 'html.parser')
         episodes = soup.find_all('div', attrs={'class': re.compile('episode ')})
 
-        _podcasts_query = dict()
+        self.__dict__.clear()
 
         for x, episode in enumerate(episodes):
             episode_num = episode.find('span', attrs={'class': 'episode-num'}).get_text().strip('#')
@@ -102,7 +106,7 @@ class JREPodcastAPI(object):
             dllinks = episode.find('ul', attrs={'class': 'download-links'})
             vimeo_link = dllinks.find('a')['href']
 
-            _podcasts_query[x] = {
+            self.__dict__[x] = {
                 'episode': episode_num,
                 'title': title,
                 'date': podcast_date,
@@ -110,4 +114,4 @@ class JREPodcastAPI(object):
                 'mp3_url': podcast_mp3,
                 'vimeo_url': vimeo_link
             }
-        return(_podcasts_query)
+        return self.__dict__
