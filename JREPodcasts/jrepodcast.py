@@ -72,7 +72,7 @@ class JREPodcastAPI(object):
         print(f"Episode {episode} with {podcast['title']}, finished downloading!")
         return
 
-    def streamAudio(url):
+    def streamAudio(self, url):
 
         stream = vlc.MediaPlayer(url)
         return(stream)
