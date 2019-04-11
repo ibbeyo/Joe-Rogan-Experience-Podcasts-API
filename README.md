@@ -5,9 +5,9 @@ Sample Usage:
 
 ``` {.sourceCode .python}
 
->>> from JREPodcasts import jrepodcast
+>>> from JREPodcasts.api import JREPodcastsAPI()
 
->>> podcasts = jrepodcast.API()
+>>> podcasts = JREPodcastsAPI()
 
 #Get Recent Updates (Podcasts from front page)
 >>> podcasts.recent()
@@ -16,7 +16,7 @@ dict_values([{'episode': '1278', 'title': 'Kevin Hart', 'date': '04.06.19', 'des
 
 
 #Search for a podcast
->>> podcasts.search("James Hetfield")
+>>> podcasts.searchFor("James Hetfield")
 
 {0: {'episode': '887', 'title': 'James Hetfield', 'date': '12.16.16', 'desc': b'#887.\xc2\xa0James Hetfield is a musician, singer and songwriter known for being the co-founder, lead vocalist, rhythm guitarist and main songwriter for the American heavy metal band Metallica.\n', 'mp3_url': 'http://traffic.libsyn.com/joeroganexp/p887.mp3'}}
 
@@ -24,3 +24,10 @@ dict_values([{'episode': '1278', 'title': 'Kevin Hart', 'date': '04.06.19', 'des
 >>> podcasts.download(path='C:/temp', episode=887)
 
 Episode 887 with James Hetfield, finished downloading!
+
+
+#Stream Audio Podcasts with controls available
+>>> stream = podcasts.streamAudio(url='http://traffic.libsyn.com/joeroganexp/p887.mp3')
+>>> stream.play()
+>>> stream.stop()
+>>> stream.pause()
